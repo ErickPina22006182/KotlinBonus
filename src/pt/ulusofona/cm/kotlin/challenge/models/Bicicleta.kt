@@ -17,6 +17,6 @@ class Bicicleta (identificador : String) : Veiculo(identificador) {
     }
 
     override fun toString(): String {
-        return "Bicicleta | ${this.identificador} | ${this.dia}-${this.mes}-${this.ano} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
+        return "Bicicleta | ${this.identificador} | ${this.dia.toString().padStart(2,'0')}-${this.mes.toString().padStart(2,'0')}-${this.ano} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
     }
 }

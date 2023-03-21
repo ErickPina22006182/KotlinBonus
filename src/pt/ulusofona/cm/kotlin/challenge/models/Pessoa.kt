@@ -91,6 +91,6 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     override fun toString(): String {
-        return "Pessoa | $nome | ${this.dataDeNascimentoAux.dayOfMonth}-${this.dataDeNascimentoAux.month}-${this.dataDeNascimentoAux.year} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
+        return "Pessoa | $nome | ${this.dataDeNascimentoAux.dayOfMonth.toString().padStart(2,'0')}-${this.dataDeNascimentoAux.month.toString().padStart(2,'0')}-${this.dataDeNascimentoAux.year} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
     }
 }
