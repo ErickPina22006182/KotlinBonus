@@ -17,11 +17,7 @@ class Carro (identificador : String, var motor: Motor) : Veiculo(identificador){
         }
     }
 
-
-
-
-
     override fun toString(): String {
-        return "Carro | ${this.identificador} | ${this.dia.toString().padStart(2,'0')}-${this.mes.toString().padStart(2,'0')}-${this.ano} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
+        return "Carro | ${this.identificador} | ${this.dia.toString().padStart(2,'0')}-${this.mes.toString().padStart(2,'0')}-${this.ano} | ${this.posicao}"
     }
 }

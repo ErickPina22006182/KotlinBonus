@@ -34,18 +34,28 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
             if(identificador == i.identificador){
                 veiculos.remove(i)
                 comprador.comprarVeiculo(i)
+                return
             }
         }
+        throw VeiculoNaoEncontradoException()
     }
 
     fun moverVeiculoPara(identificador : String , x: Int, y: Int){
         for (i in veiculos){
             if(identificador == i.identificador){
-                i.moverPara(x, y)
-                break
+                if(this.temCarta()){
+                    if(x != this.posicao.x || y != this.posicao.y) {
+                        i.moverPara(x, y)
+                        return
+                    }else{
+                        throw AlterarPosicaoException()
+                    }
+                }else{
+                    throw PessoaSemCartaException()
+                }
             }
         }
-        throw AlterarPosicaoException()
+        throw VeiculoNaoEncontradoException()
     }
 
     override fun moverPara(x: Int, y: Int) {
@@ -57,7 +67,6 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     fun temCarta() : Boolean{
-
         if(carta != null){
             return true
         }
@@ -85,12 +94,13 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
         throw MenorDeIdadeException()
     }
     fun tirarCarta(){
-        if(carta != null && eMaiorDeIdade() ) {
+        val aux = this.eMaiorDeIdade()
+        if(carta != null && aux) {
             carta = Carta()
         }
     }
 
     override fun toString(): String {
-        return "Pessoa | $nome | ${this.dataDeNascimentoAux.dayOfMonth.toString().padStart(2,'0')}-${this.dataDeNascimentoAux.month.toString().padStart(2,'0')}-${this.dataDeNascimentoAux.year} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
+        return "Pessoa | $nome | ${this.dataDeNascimentoAux.dayOfMonth.toString().padStart(2,'0')}-${this.dataDeNascimentoAux.month.value.toString().padStart(2,'0')}-${this.dataDeNascimentoAux.year} | ${this.posicao}"
     }
 }
