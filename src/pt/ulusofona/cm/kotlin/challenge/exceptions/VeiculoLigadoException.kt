@@ -1,4 +1,3 @@
 package pt.ulusofona.cm.kotlin.challenge.exceptions
 
-class VeiculoLigadoException {
-}
+class VeiculoLigadoException() : Exception()
