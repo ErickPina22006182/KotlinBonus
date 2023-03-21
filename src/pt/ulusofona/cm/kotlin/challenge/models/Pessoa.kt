@@ -98,8 +98,9 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
                 }
             }else if((LocalDateTime.now().year - dataDeNascimentoAux.year) > 18){
                 carta = Carta()
+            }else {
+                throw MenorDeIdadeException()
             }
-            throw MenorDeIdadeException()
         }
     }
 
