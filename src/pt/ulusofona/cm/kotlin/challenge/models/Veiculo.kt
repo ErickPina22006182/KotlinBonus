@@ -11,10 +11,6 @@ abstract class Veiculo(val identificador: String) : Movimentavel {
     val ano = localDate.year
     var posicao: Posicao = Posicao(0,0)
 
-    fun setPosicao(x:Int, y:Int){
-        this.posicao.alterarPosicaoPara(x,y)
-    }
-
     abstract fun requerCarta() : Boolean
 
     abstract override fun toString(): String

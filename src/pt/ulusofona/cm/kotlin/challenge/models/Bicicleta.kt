@@ -10,7 +10,7 @@ class Bicicleta (identificador : String) : Veiculo(identificador) {
 
     override fun moverPara(x: Int, y: Int) {
         if(x != this.posicao.x && y != this.posicao.y){
-            setPosicao(x,y)
+            this.posicao.alterarPosicaoPara(x,y)
         }else{
             throw AlterarPosicaoException()
         }
