@@ -14,8 +14,10 @@ class Carro (identificador : String, var motor: Motor) : Veiculo(identificador),
 
     override fun moverPara(x: Int, y: Int) {
         if(x != this.posicao.x || y != this.posicao.y){
-            setPosicao(x,y)
-            motor.desligar()
+            if(motor.ligado) {
+                setPosicao(x, y)
+                motor.desligar()
+            }
         }else{
             throw AlterarPosicaoException()
         }
