@@ -45,7 +45,7 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
             if(identificador == i.identificador){
                 if(i.requerCarta()) {
                     if (this.temCarta()) {
-                        if (x != this.posicao.x || y != this.posicao.y) {
+                        if (x != this.posicao.x && y != this.posicao.y) {
                             i.moverPara(x, y)
                             return
                         } else {
@@ -68,7 +68,7 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     override fun moverPara(x: Int, y: Int) {
-        if(x != this.posicao.x || y != this.posicao.y){
+        if(x != this.posicao.x && y != this.posicao.y){
             this.posicao.alterarPosicaoPara(x,y)
         }else{
             throw AlterarPosicaoException()
