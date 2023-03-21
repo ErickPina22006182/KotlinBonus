@@ -51,7 +51,7 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
                         throw AlterarPosicaoException()
                     }
                 }else{
-                    throw PessoaSemCartaException()
+                    throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
                 }
             }
         }
@@ -70,33 +70,29 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
         if(carta != null){
             return true
         }
-        throw PessoaSemCartaException()
+        throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
     }
 
-    fun eMaiorDeIdade() : Boolean{
-        if((LocalDateTime.now().year - dataDeNascimentoAux.year) == 18){
-            return if((LocalDateTime.now().month == dataDeNascimentoAux.month)){
-                if(LocalDateTime.now().dayOfMonth < dataDeNascimentoAux.dayOfMonth){
-                    throw MenorDeIdadeException()
-                }else{
-                    true
-                }
-            }else {
-                if(LocalDateTime.now().month > dataDeNascimentoAux.month){
-                    true
-                }else{
-                    throw MenorDeIdadeException()
-                }
-            }
-        }else if((LocalDateTime.now().year - dataDeNascimentoAux.year) > 18){
-            return true
-        }
-        throw MenorDeIdadeException()
-    }
     fun tirarCarta(){
-        val aux = this.eMaiorDeIdade()
-        if(carta != null && aux) {
-            carta = Carta()
+        if(carta == null) {
+            if((LocalDateTime.now().year - dataDeNascimentoAux.year) == 18){
+                if((LocalDateTime.now().month == dataDeNascimentoAux.month)){
+                    if(LocalDateTime.now().dayOfMonth < dataDeNascimentoAux.dayOfMonth){
+                        throw MenorDeIdadeException()
+                    }else{
+                        carta = Carta()
+                    }
+                }else {
+                    if(LocalDateTime.now().month > dataDeNascimentoAux.month){
+                        carta = Carta()
+                    }else{
+                        throw MenorDeIdadeException()
+                    }
+                }
+            }else if((LocalDateTime.now().year - dataDeNascimentoAux.year) > 18){
+                carta = Carta()
+            }
+            throw MenorDeIdadeException()
         }
     }
 
