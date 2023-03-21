@@ -43,15 +43,24 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     fun moverVeiculoPara(identificador : String , x: Int, y: Int){
         for (i in veiculos){
             if(identificador == i.identificador){
-                if(this.temCarta()){
-                    if(x != this.posicao.x || y != this.posicao.y) {
-                        i.moverPara(x, y)
-                        return
-                    }else{
-                        throw AlterarPosicaoException()
+                if(i.requerCarta()) {
+                    if (this.temCarta()) {
+                        if (x != this.posicao.x || y != this.posicao.y) {
+                            i.moverPara(x, y)
+                            return
+                        } else {
+                            throw AlterarPosicaoException()
+                        }
+                    } else {
+                        throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
                     }
                 }else{
-                    throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
+                    if (x != this.posicao.x || y != this.posicao.y) {
+                        i.moverPara(x, y)
+                        return
+                    } else {
+                        throw AlterarPosicaoException()
+                    }
                 }
             }
         }
@@ -67,10 +76,8 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     fun temCarta() : Boolean{
-        if(carta != null){
-            return true
-        }
-        throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
+        return carta != null
+
     }
 
     fun tirarCarta(){
