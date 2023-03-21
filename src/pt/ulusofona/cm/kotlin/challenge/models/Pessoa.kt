@@ -44,22 +44,11 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
         for (i in veiculos){
             if(identificador == i.identificador){
                 if(i.requerCarta()) {
-                    if (this.temCarta()) {
-                        if (x != this.posicao.x && y != this.posicao.y) {
-                            i.moverPara(x, y)
-                            return
-                        } else {
-                            throw AlterarPosicaoException()
-                        }
-                    } else {
-                        throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
-                    }
-                }else{
-                    if (x != this.posicao.x || y != this.posicao.y) {
+                    if(this.temCarta()) {
                         i.moverPara(x, y)
                         return
-                    } else {
-                        throw AlterarPosicaoException()
+                    }else {
+                        throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
                     }
                 }
             }
