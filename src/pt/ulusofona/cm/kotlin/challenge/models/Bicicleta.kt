@@ -1,5 +1,7 @@
 package pt.ulusofona.cm.kotlin.challenge.models
 
+import pt.ulusofona.cm.kotlin.challenge.exceptions.AlterarPosicaoException
+
 class Bicicleta (identificador : String) : Veiculo(identificador) {
 
     override fun requerCarta() : Boolean{
@@ -7,10 +9,14 @@ class Bicicleta (identificador : String) : Veiculo(identificador) {
     }
 
     override fun moverPara(x: Int, y: Int) {
-        setPosicao(x,y)
+        if(x != this.posicao.x || y != this.posicao.y){
+            setPosicao(x,y)
+        }else{
+            throw AlterarPosicaoException()
+        }
     }
 
     override fun toString(): String {
-        return "Bicicleta | ${this.identificador} | ${this.dataDeAquisicao.day}-${this.dataDeAquisicao.month}-${this.dataDeAquisicao.year} |  ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
+        return "Bicicleta | ${this.identificador} | ${this.dia}-${this.mes}-${this.ano} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
     }
 }

@@ -1,6 +1,11 @@
 package pt.ulusofona.cm.kotlin.challenge.models
+import pt.ulusofona.cm.kotlin.challenge.exceptions.AlterarPosicaoException
+import pt.ulusofona.cm.kotlin.challenge.exceptions.MenorDeIdadeException
+import pt.ulusofona.cm.kotlin.challenge.exceptions.PessoaSemCartaException
+import pt.ulusofona.cm.kotlin.challenge.exceptions.VeiculoNaoEncontradoException
 import pt.ulusofona.cm.kotlin.challenge.interfaces.Movimentavel
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -8,19 +13,20 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     var veiculos: ArrayList<Veiculo> = ArrayList()
     var carta: Carta? = null
     var posicao: Posicao = Posicao(0,0)
-    var dataDeNascimentoAux : LocalDateTime = LocalDateTime.of(dataDeNascimento.year, dataDeNascimento.month, dataDeNascimento.day, dataDeNascimento.hours, dataDeNascimento.minutes)
+    val instant = dataDeNascimento.toInstant()
+    val dataDeNascimentoAux = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
     fun comprarVeiculo(veiculo : Veiculo){
         veiculos.add(veiculo)
         veiculo.dataDeAquisicao = Date()
     }
 
-    fun pesquisarVeiculo(identificador : String) : Veiculo?{
+    fun pesquisarVeiculo(identificador : String) : Veiculo {
         for (i in veiculos){
             if(identificador == i.identificador){
                 return i
             }
         }
-        return null
+        throw VeiculoNaoEncontradoException()
     }
 
     fun venderVeiculo(identificador : String , comprador : Pessoa){
@@ -36,27 +42,47 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
         for (i in veiculos){
             if(identificador == i.identificador){
                 i.moverPara(x, y)
+                break
             }
         }
+        throw AlterarPosicaoException()
     }
 
     override fun moverPara(x: Int, y: Int) {
-        this.posicao.alterarPosicaoPara(x,y)
+        if(x != this.posicao.x || y != this.posicao.y){
+            this.posicao.alterarPosicaoPara(x,y)
+        }else{
+            throw AlterarPosicaoException()
+        }
     }
 
     fun temCarta() : Boolean{
-        return carta != null
+
+        if(carta != null){
+            return true
+        }
+        throw PessoaSemCartaException()
     }
 
     fun eMaiorDeIdade() : Boolean{
-        if((LocalDateTime.now().year - dataDeNascimento.year) == 18){
+        if((LocalDateTime.now().year - dataDeNascimentoAux.year) == 18){
             return if((LocalDateTime.now().month == dataDeNascimentoAux.month)){
-                (LocalDateTime.now().dayOfMonth == dataDeNascimentoAux.dayOfMonth) || (LocalDateTime.now().dayOfMonth > dataDeNascimentoAux.dayOfMonth)
-            }else (LocalDateTime.now().month > dataDeNascimentoAux.month)
-        }else if((LocalDateTime.now().year - dataDeNascimento.year) > 18){
+                if(LocalDateTime.now().dayOfMonth < dataDeNascimentoAux.dayOfMonth){
+                    throw MenorDeIdadeException()
+                }else{
+                    true
+                }
+            }else {
+                if(LocalDateTime.now().month > dataDeNascimentoAux.month){
+                    true
+                }else{
+                    throw MenorDeIdadeException()
+                }
+            }
+        }else if((LocalDateTime.now().year - dataDeNascimentoAux.year) > 18){
             return true
         }
-        return false
+        throw MenorDeIdadeException()
     }
     fun tirarCarta(){
         if(carta != null && eMaiorDeIdade() ) {
@@ -65,6 +91,6 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     override fun toString(): String {
-        return "Pessoa | $nome | ${this.dataDeNascimento.day}-${this.dataDeNascimento.month}-${this.dataDeNascimento.year} |  ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
+        return "Pessoa | $nome | ${this.dataDeNascimentoAux.dayOfMonth}-${this.dataDeNascimentoAux.month}-${this.dataDeNascimentoAux.year} | ${this.posicao} | x:${this.posicao.x} | y:${this.posicao.y}"
     }
 }
