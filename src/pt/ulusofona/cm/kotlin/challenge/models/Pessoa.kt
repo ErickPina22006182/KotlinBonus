@@ -43,14 +43,11 @@ class Pessoa (val nome: String, val dataDeNascimento: Date) : Movimentavel {
     fun moverVeiculoPara(identificador : String , x: Int, y: Int){
         for (i in veiculos){
             if(identificador == i.identificador){
-                if(i.requerCarta()) {
-                    if(this.temCarta()) {
-                        i.moverPara(x, y)
-                        return
-                    }else {
-                        throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
-                    }
+                if(i.requerCarta() && !temCarta()) {
+                    throw PessoaSemCartaException("${this.nome} não tem carta para conduzir o veículo indicado")
                 }
+                i.moverPara(x, y)
+                return
             }
         }
         throw VeiculoNaoEncontradoException()
