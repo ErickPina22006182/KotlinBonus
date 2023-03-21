@@ -22,24 +22,25 @@ class Carro (identificador : String, var motor: Motor) : Veiculo(identificador),
             throw AlterarPosicaoException()
         }
     }
+
     override fun ligar() {
-        if(!ligado) {
-            ligado = true
+        if(!motor.ligado) {
+            motor.ligado = true
         }else {
             throw VeiculoLigadoException()
         }
     }
 
     override fun desligar() {
-        if(ligado) {
-            ligado = false
+        if(motor.ligado) {
+            motor.ligado = false
         }else {
             throw VeiculoDesligadoException()
         }
     }
 
     override fun estaLigado(): Boolean {
-        return ligado
+        return motor.estaLigado()
     }
 
     override fun toString(): String {
